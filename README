@@ -68,6 +68,27 @@ To install this module, run the following commands:
 	make test
 	make install
 
+SUPPORT AND DOCUMENTATION
+
+After installing, you can find documentation for this module with the
+perldoc command.
+
+    perldoc Pick::TCL
+
+You can also look for information at:
+
+    RT, CPAN's request tracker (report bugs here)
+        http://rt.cpan.org/NoAuth/Bugs.html?Dist=Pick-TCL
+
+    AnnoCPAN, Annotated CPAN documentation
+        http://annocpan.org/dist/Pick-TCL
+
+    CPAN Ratings
+        http://cpanratings.perl.org/d/Pick-TCL
+
+    Search CPAN
+        http://search.cpan.org/dist/Pick-TCL/
+
 LICENSE AND COPYRIGHT
 
 Copyright (C) 2013 Jack Burton

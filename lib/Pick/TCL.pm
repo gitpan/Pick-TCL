@@ -12,7 +12,7 @@ Pick::TCL - class to run commands in a Pick TCL shell
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
@@ -20,7 +20,7 @@ Version 0.01
 # PACKAGE GLOBALS #
 ###################
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 our %_mods;
 
 #########################
@@ -392,7 +392,7 @@ sub execraw
         }
     } else {
         # Local VM
-        IPC::Run::run [ \@args, \$input, \$result, \$err ]
+        IPC::Run::run([ \@args, \$input, \$result, \$err ])
             or croak "Broken pipe to Pick: $!";
         if ($err)
         {
@@ -476,6 +476,14 @@ provided through C<%OPTIONS> may be sufficient to work with some.
 =head1 AUTHOR
 
 Jack Burton, C<< <jack@saosce.com.au> >>
+
+=head1 BUGS
+
+Please report any bugs or feature requests
+to C<bug-pick-tcl at rt.cpan.org>, or through the web interface
+at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Pick-TCL>.
+I will be notified, and then you'll automatically be notified of
+progress on your bug as I make changes.
 
 =head1 ACKNOWLEDGEMENTS
 

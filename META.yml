@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               Pick-TCL
-version:            0.01
+version:            0.02
 abstract:           class to run commands in a Pick TCL shell
 author:
     - Jack Burton <jack@saosce.com.au>
