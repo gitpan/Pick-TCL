@@ -56,6 +56,13 @@ present), any attempt to connect to a local Pick environment is
 silently converted into a remote connection with HOST set to localhost.
 Otherwise, IPC::Run is used.
 
+Although Pick::TCL works without IPC::Run, IPC::Run is still listed
+in BUILD_REQUIRES, as there's no way to specify alternate BUILD_REQUIRES
+and we need one or the other in order to pass any tests -- and IPC::Run
+seems more likely than Net::OpenSSH to be installed most places. To
+install Pick::TCL without installing IPC::Run, just set CPAN's
+build_requires_install_policy to 'no'.
+
 Obviously, for Pick::TCL to be of any use, a working (local or remote)
 Pick environment is also required.
 

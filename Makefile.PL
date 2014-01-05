@@ -12,8 +12,9 @@ WriteMakefile(
       ? ('LICENSE'=> 'perl')
       : ()),
     PL_FILES            => {},
-    PREREQ_PM => {
+    BUILD_REQUIRES => {
         'Test::More' => 0,
+        'IPC::Run' => 0,
     },
     META_MERGE => {
         optional_features => {

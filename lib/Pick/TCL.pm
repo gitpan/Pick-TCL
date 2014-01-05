@@ -12,7 +12,7 @@ Pick::TCL - class to run commands in a Pick TCL shell
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =cut
 
@@ -20,7 +20,7 @@ Version 0.02
 # PACKAGE GLOBALS #
 ###################
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 our %_mods;
 
 #########################
