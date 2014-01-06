@@ -11,11 +11,13 @@ WriteMakefile(
     ($ExtUtils::MakeMaker::VERSION >= 6.3002
       ? ('LICENSE'=> 'perl')
       : ()),
+    MIN_PERL_VERSION    => 5.006,
     PL_FILES            => {},
     BUILD_REQUIRES => {
         'Test::More' => 0,
         'IPC::Run' => 0,
     },
+    PREREQ_PM => { 'Carp' => 0, },
     META_MERGE => {
         optional_features => {
             local_pick => {

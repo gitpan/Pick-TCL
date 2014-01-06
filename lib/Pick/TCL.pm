@@ -12,7 +12,7 @@ Pick::TCL - class to run commands in a Pick TCL shell
 
 =head1 VERSION
 
-Version 0.03
+Version 0.04
 
 =cut
 
@@ -20,7 +20,7 @@ Version 0.03
 # PACKAGE GLOBALS #
 ###################
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 our %_mods;
 
 #########################
@@ -273,8 +273,12 @@ sub new
     $options{'VM'} = 'pick0' unless defined($options{'VM'});
     unless (defined($options{'USER'}))
     {
-        $options{'USER'} =
-            defined($options{'SSHUSER'}) ? $options{'SSHUSER'} : getpwuid($<);
+        # Default Pick username to remote Unix username if set
+        my $u = $options{'SSHUSER'};
+        # Otherwise local username
+        $u = eval { getpwuid($<); } unless defined($u);
+        # Handle platforms without a working getpwuid()
+        $u = getlogin() unless defined($u);
     }
     $options{'PICKBIN'} = '/usr/bin/ap' unless defined($options{'PICKBIN'});
     $options{'OPTDATA'} = '-d' unless defined($options{'OPTDATA'});

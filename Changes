@@ -1,5 +1,10 @@
 Revision history for Pick-TCL
 
+0.04    2014-01-06
+        Update dependencies in Makefile.PL.
+        Add fallback to getlogin() for systems without a working getpwuid()
+        for defaulting USER when neither USER nor SSHUSER is specified.
+
 0.03    2014-01-05
         Move dependence on Test::More from PREREQ_PM to BUILD_REQUIRES
         and add IPC::Run to BUILD_REQUIRES (this rather defeats the
