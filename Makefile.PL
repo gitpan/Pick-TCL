@@ -15,9 +15,16 @@ WriteMakefile(
     PL_FILES            => {},
     BUILD_REQUIRES => {
         'Test::More' => 0,
+        'IO::Select' => 0,
+        'IO::Socket' => 0,
         'IPC::Run' => 0,
+        'Socket' => 0,
     },
-    PREREQ_PM => { 'Carp' => 0, },
+    PREREQ_PM => { 'Carp' => 0,
+                   'IO::Select' => 0,
+                   'IO::Socket' => 0,
+                   'Socket' => 0,
+    },
     META_MERGE => {
         optional_features => {
             local_pick => {

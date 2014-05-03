@@ -1,5 +1,9 @@
 Revision history for Pick-TCL
 
+0.05    2014-05-03
+        Add methods for asynchronous execution (spawn, is_ready, output,
+        outputraw, partialoutput, partialoutputraw)
+
 0.04    2014-01-06
         Update dependencies in Makefile.PL.
         Add fallback to getlogin() for systems without a working getpwuid()
