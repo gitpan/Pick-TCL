@@ -15,7 +15,7 @@ Pick::TCL - class to run commands in a Pick TCL shell
 
 =head1 VERSION
 
-Version 0.05
+Version 0.06
 
 =cut
 
@@ -23,7 +23,7 @@ Version 0.05
 # PACKAGE GLOBALS #
 ###################
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 our %_mods;
 
 #########################
@@ -86,7 +86,7 @@ require L<Net::OpenSSH> to be installed and usable.
 
 =back
 
-Note that C<Pick::TCL> will croak if used when neither L<IPC::Run>
+Note that C<Pick::TCL> will croak() if used when neither L<IPC::Run>
 nor L<Net::OpenSSH> are usable.
 
 =cut
@@ -132,7 +132,8 @@ sub _bring_up_ssh
         unless $_mods{'remote'};
     my $ssh = undef;
     $ssh = Net::OpenSSH->new($cs, ssh_cmd => $$self{'_OPTIONS'}->{'SSHCMD'},
-        master_stderr_discard => 1, timeout => 15, kill_ssh_on_timeout => 1,
+        master_stderr_discard => 1,
+        timeout => $$self{'_OPTIONS'}->{'TIMEOUT'}, kill_ssh_on_timeout => 1,
         default_ssh_opts => [ '-oConnectionAttempts=0' ] );
     my $e = $ssh->error;
     if ($e)
@@ -207,12 +208,12 @@ which case C<HOST> will be set implicitly to C<localhost>).
 =item PORT
 
 Only valid if C<HOST> is also set. Specifies the TCP port on
-which to connect to B<sshd>(8) on C<HOST>. Defaults to 22.
+which to connect to sshd(8) on C<HOST>. Defaults to 22.
 
 =item SSHUSER
 
 Only valid if C<HOST> is also given. Specifies the Unix username
-to supply to the remote B<sshd>(8) on C<HOST>. Defaults to the
+to supply to the remote sshd(8) on C<HOST>. Defaults to the
 current local username.
 
 =item SSHPASS
@@ -225,9 +226,15 @@ authentication is used instead of password authentication.
 =item SSHCMD
 
 Only valid if C<HOST> is also given. Specifies the full path
-to the B<ssh>(1) binary (in case L<Net::OpenSSH> cannot find
+to the ssh(1) binary (in case L<Net::OpenSSH> cannot find
 it). If not specified, only F</usr/local/bin/ssh>,
 F</usr/bin/ssh> and F</bin/ssh> (in that order) are tried.
+
+=item TIMEOUT
+
+Only valid if C<HOST> is also given. Specifies the maximum
+number of seconds for which to wait for a response from a
+remote Pick system.
 
 =item VM
 
@@ -278,17 +285,18 @@ the Pick session. Defaults to C<-d>.
 =back
 
 All keys are optional, with the caveats that if C<PORT>,
-C<SSHUSER> and/or C<SSHPASS> are specified, for those options
-to take effect C<HOST> must also be specified; and likewise
-C<MDPASS> has no effect without C<MD>.
+C<SSHUSER>, C<SSHPASS> and/or C<TIMEOUT> are specified,
+for those options to take effect C<HOST> must also be
+specified; and likewise C<MDPASS> has no effect without
+C<MD>.
 
 =head3 Note:
 
-C<new()> does not actually try to log on to C<VM> -- where
+new() does not actually try to log on to C<VM> -- where
 Pick is local, the C<%options> are merely stored in the
 C<Pick::TCL> object for later use; on the other hand if
-C<HOST> is set (i.e. Pick is remote), C<new()> will establish
-a L<Net::OpenSSH> link to C<HOST> or C<croak()> trying.
+C<HOST> is set (i.e. Pick is remote), new() will establish
+a L<Net::OpenSSH> link to C<HOST> or croak() trying.
 
 =cut
 
@@ -304,7 +312,7 @@ sub new
     my $self = {};
 
     # Check/set options
-    croak "Pick::TCL consructor options must be a balanced hash"
+    croak "Pick::TCL constructor options must be a balanced hash"
         unless scalar(@_) % 2 == 0;
     my %options = @_;
     $options{'VM'} = 'pick0' unless defined($options{'VM'});
@@ -321,6 +329,12 @@ sub new
     $options{'OPTDATA'} = '-d' unless defined($options{'OPTDATA'});
     $options{'OPTSILENT'} = '-s' unless defined($options{'OPTSILENT'});
     $options{'OPTVM'} = '-n' unless defined($options{'OPTVM'});
+    if (defined($options{'TIMEOUT'}))
+    {
+      $options{'TIMEOUT'} = 0 + $options{'TIMEOUT'};
+    } else {
+      $options{'TIMEOUT'} = 15;
+    }
     if ((not defined($options{'HOST'})) && (not defined($_mods{'local'})))
     {
         # For a local VM, if we're missing IPC::Run, just ssh to the
@@ -365,11 +379,11 @@ on C<stderr>), returns false, sets C<$!> and emits a suitable
 message. Likewise on B<ssh> error, except that exit codes 11 and 255
 are ignored, in order to support ancient versions of L<sshd(8)>).
 
-C<croak()>s if the call to a local VM fails outright.
+croak()s if the call to a local VM fails outright.
 
 =head2 $ap->execraw($tclcmd, @input)
 
-Does the same thing as the C<exec()> method but without any
+Does the same thing as the exec() method but without any
 output sanitisation.
 
 This is useful when dealing with binary output, or when consecutive
@@ -457,14 +471,14 @@ with C<$ap>.
 
 On success, returns true. On failure, returns C<undef> and sets C<$!>.
 
-Output can be retrieved later with the C<output> method (see below).
+Output can be retrieved later with the output() method (see below).
 
 =cut
 
 sub spawn
 {
     my $self = shift;
-    my $func = 'Pick::TCL::spawnraw()';
+    my $func = 'Pick::TCL::spawn()';
     croak "$func is not a class method" unless ref($self);
     if (scalar(@_) == 0)
     {
@@ -571,7 +585,7 @@ has aborted or if no job was spawned in the first place.
 sub is_ready
 {
     my $self = shift;
-    my $func = 'Pick::TCL::is_ready';
+    my $func = 'Pick::TCL::is_ready()';
     croak "$func is not a class method" unless ref($self);
 
     # Same approach for local or remote VM
@@ -640,7 +654,7 @@ list if called in list context) if no job has been spawned.
 sub outputraw
 {
     my $self = shift;
-    my $func = 'Pick::TCL::outputraw';
+    my $func = 'Pick::TCL::outputraw()';
     croak "$func is not a class method" unless ref($self);
     $$self{'_PARTIAL'} = '' unless defined($$self{'_PARTIAL'});
 
@@ -684,7 +698,7 @@ have any output yet or no job has been spawned.
 sub partialoutputraw
 {
     my $self = shift;
-    my $func = 'Pick::TCL::partialoutputraw';
+    my $func = 'Pick::TCL::partialoutputraw()';
     croak "$func is not a class method" unless ref($self);
     return $$self{'_PARTIAL'};
 }
@@ -692,7 +706,7 @@ sub partialoutputraw
 sub partialoutput
 {
     my $self = shift;
-    my $func = 'Pick::TCL::partialoutput';
+    my $func = 'Pick::TCL::partialoutput()';
     croak "$func is not a class method" unless ref($self);
     my $raw = $self->partialoutputraw;
     if (defined($raw))
@@ -727,9 +741,9 @@ sub logout
 
 =head2 Escaping metacharacters
 
-The commands sent to C<exec()> and C<execraw()> are always interpreted by
+The commands sent to exec() and execraw() are always interpreted by
 the Pick B<TCL> interpreter -- so be sure to escape anything that needs
-escaping in B<TCL> before feeding it to C<exec()> or C<execraw()> (no
+escaping in B<TCL> before feeding it to exec() or execraw() (no
 different from running native).
 
 If C<HOST> is set, there's also the remote login shell to consider.

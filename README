@@ -30,7 +30,7 @@ sanitisation, is provided for use in such circumstances.
 
 * Error suppression
 
-Many older Pick deployments still (as of 2013) tend to be found
+Many older Pick deployments still (as of 2014) tend to be found
 running on host systems where only long-obsolete releases of
 sshd are available. When used with certain (also long-obsolete)
 releases of AP or D3, these tend to return false error conditions
@@ -53,8 +53,8 @@ partial output earlier).
 DEPENDENCIES
 
 To communicate with remote Pick environments, Pick::TCL requires
-Net::OpenSSH. Additionally, the remote user's login shell must be set to
-a Bourne-compatible shell.
+Net::OpenSSH. Additionally, the remote user's login shell must be set
+to a Bourne-compatible shell.
 
 To communicate with local Pick environment, Pick::TCL requires either
 IPC::Run or Net::OpenSSH. If IPC::Run is missing (but Net::OpenSSH is
@@ -69,8 +69,8 @@ seems more likely than Net::OpenSSH to be installed most places. To
 install Pick::TCL without installing IPC::Run, just set CPAN's
 build_requires_install_policy to 'no'.
 
-Obviously, for Pick::TCL to be of any use, a working (local or remote)
-Pick environment is also required.
+Obviously, for Pick::TCL to be of any practical use, a working (local
+or remote) Pick environment is also required.
 
 INSTALLATION
 

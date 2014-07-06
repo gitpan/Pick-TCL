@@ -1,5 +1,9 @@
 Revision history for Pick-TCL
 
+0.06    2014-07-06
+        Add option for the caller to specify a timeout at object
+        instantiation time (only when Pick is remote).
+
 0.05    2014-05-03
         Add methods for asynchronous execution (spawn, is_ready, output,
         outputraw, partialoutput, partialoutputraw)
